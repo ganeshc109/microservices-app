@@ -5,5 +5,7 @@ spring:
     config:
       server:
         git:
-          uri:https://github.com/your-repo/config-repo
-          
+          uri: https://github.com/ganeshc109/config-repo
+          clone-on-start: true
+          default-label: main
+          search-paths: ""
