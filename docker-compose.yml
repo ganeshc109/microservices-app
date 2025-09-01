@@ -7,8 +7,11 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=usersdb
+      - TZ=Asia/Kolkata
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data   # <-- persist Postgres
 
   mysql:
     image: mysql:8
@@ -18,3 +21,9 @@ services:
       - MYSQL_DATABASE=ordersdb
     ports:
       - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql               # <-- persist MySQL
+
+volumes:
+  postgres_data:
+  mysql_data:

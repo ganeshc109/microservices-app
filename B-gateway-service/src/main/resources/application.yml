@@ -1,6 +1,41 @@
-server:
-  port: 8080
+spring:
+  application:
+    name: b-gateway-service
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+          # Customize auto-discovery to use /auto/** instead of service names
+          predicates:
+            - name: Path
+              args:
+                pattern: "'/auto/'+serviceId+'/**'"
+          filters:
+            - name: RewritePath
+              args:
+                regexp: "'/auto/'+serviceId+'/(?<remaining>.*)'"
+                replacement: "'/${remaining}'"
+
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+# Enable gateway actuator endpoints
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: DEBUG
+    com.example.demo: DEBUG

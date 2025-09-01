@@ -1,5 +1,11 @@
-server:
-  port: 0 # random port
+spring:
+  application:
+    name: B-order-service
+  config:
+    import: "configserver:http://localhost:8888"   # <- required in latest Spring Cloud
+  cloud:
+    config:
+      fail-fast: true
 eureka:
   client:
     service-url:
