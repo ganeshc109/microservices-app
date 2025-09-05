@@ -1,8 +1,11 @@
 spring:
   application:
     name: b-gateway-service
-
+  config:
+    import: "configserver:http://localhost:8888"   # <- required in latest Spring Cloud
   cloud:
+    config:
+      fail-fast: true
     gateway:
       discovery:
         locator:
@@ -13,6 +16,7 @@ spring:
             - name: Path
               args:
                 pattern: "'/auto/'+serviceId+'/**'"
+            # 👆 rewrite and path are under locator
           filters:
             - name: RewritePath
               args:

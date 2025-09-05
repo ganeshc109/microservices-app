@@ -70,7 +70,13 @@ public class GatewayRoutesConfig {
         }
 
         URI targetUri = URI.create(target.get().getUri().toString() + exchange.getRequest().getPath().toString());
-        ServerHttpRequest request = exchange.getRequest().mutate().uri(targetUri).build();
+        
+        String token = exchange.getRequest().getHeaders().getFirst("Authorization");
+        ServerHttpRequest request = exchange.getRequest().mutate()
+                .uri(targetUri)
+                .header("Authorization", token != null ? token : "")
+                .build();
+
         log.info("Routing {} request for profile {} to URI {}", serviceName, profile, targetUri);
 
         return chain.filter(exchange.mutate().request(request).build());

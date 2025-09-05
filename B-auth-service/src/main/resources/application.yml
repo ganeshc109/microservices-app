@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: B-auth-service
+  config:
+    import: "configserver:http://localhost:8888"   # <- required in latest Spring Cloud
+  cloud:
+    config:
+      fail-fast: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.security.authentication: TRACE
+    org.springframework.security.web.authentication: TRACE
+    org.springframework.security.web.access: TRACE
+    com.example.demo: DEBUG   # your own package

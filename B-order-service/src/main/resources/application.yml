@@ -10,3 +10,21 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      userService:
+        register-health-indicator: true
+        sliding-window-size: 10          # Number of calls to evaluate
+        minimum-number-of-calls: 5
+        failure-rate-threshold: 50       # % of failed calls before CB opens
+        wait-duration-in-open-state: 10s # How long CB stays open before retrying
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+  retry:
+    instances:
+      userService:
+        max-attempts: 3
+        wait-duration: 500ms
+
