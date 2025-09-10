@@ -24,6 +24,18 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql               # <-- persist MySQL
 
+
+  redis:
+    image: redis:7
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]  # enables AOF persistence
+    volumes:
+      - redis_data:/data   # persist Redis data (optional if you want persistence)
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   mysql_data:
+  redis_data:

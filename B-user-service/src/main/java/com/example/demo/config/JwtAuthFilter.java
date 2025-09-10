@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -51,7 +52,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     Collections.singletonList(new SimpleGrantedAuthority(authority))
                             );
 
+                    // ✅ attach request details
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    // ✅ mark user as authenticated
                     SecurityContextHolder.getContext().setAuthentication(auth);
+
                     log.info("✅ JWT validated. User: {}, Role: {}", username, authority);
                 } else {
                     log.error("❌ JWT validation failed");
@@ -66,4 +72,3 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-

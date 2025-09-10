@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Order;
+import com.example.demo.service.DuplicateOrderException;
 import com.example.demo.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,12 @@ public class OrderController {
     
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody Order order){
-        order.setOrderDate(LocalDateTime.now());
-        return ResponseEntity.ok(orderService.createOrder(order));
+        try {
+            order.setOrderDate(LocalDateTime.now());
+            return ResponseEntity.ok(orderService.createOrderWithLock(order));
+        } catch (DuplicateOrderException e) {
+            return ResponseEntity.status(409).body(null); // 409 Conflict
+        }
     }
 
     @GetMapping
@@ -36,9 +41,11 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Order order = orderService.getOrderById(id);
+        if (order == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(order);
     }
 
     @DeleteMapping("/{id}")
@@ -46,5 +53,4 @@ public class OrderController {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
-
 }

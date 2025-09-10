@@ -35,6 +35,23 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
+
+		<!-- Spring Data Redis -->
+		<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<!-- (Optional) Redisson for distributed locks -->
+		<!-- Add if you want Redisson; check for latest version if you pin it -->
+		<dependency>
+		<groupId>org.redisson</groupId>
+		<artifactId>redisson-spring-boot-starter</artifactId>
+		<version>3.43.0</version>
+		</dependency>
+
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
